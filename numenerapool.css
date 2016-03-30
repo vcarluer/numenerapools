@@ -1,35 +1,32 @@
 body {
-    font-size: x-large
-}
-
-.might {
-    background-color: red;    
-}
-
-.speed {
-    background-color: green;
-}
-
-.intellect {
-    background-color: blue;
-}
-
-.minus {
-    float: left;
-    width: 33%;
-    height: 75px;
+    font-size: x-large;
+    background-color: #26282a;
+    color: #df8339;
     text-align: center;
+}
+
+#logo {
+    width: 200px;
+    border: 10px;
+}
+
+.pool {
+    margin: 10px;
+    display: flex;
 }
 
 .statContainer {
     float: left;
     width: 33%;
     height: 75px;
+    min-width: 130px;
 }
 
 .poolTitle {
     text-align: center;
     display: block;
+    color: #ffcda4;
+    font-weight: bold;
 }
 
 .stat {
@@ -37,9 +34,26 @@ body {
     display: block;
 }
 
+.minus {
+    background-color: #52565b;
+    float: left;
+    width: 33%;
+    height: 75px;
+    text-align: center;
+}
+
 .add {
+    background-color: #52565b;
     float: right;
     width: 33%;
     text-align: center;
     height: 75px;
+}
+
+#credits {
+    font-size: x-small;
+}
+
+a {
+    color: #ffcda4;
 }

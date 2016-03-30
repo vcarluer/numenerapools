@@ -27,7 +27,7 @@ function statPool() {
         this.name = name;
         this.poolDiv = document.createElement('div');
         this.css = css;
-        
+        this.poolDiv.className = 'pool';
         div.appendChild(this.poolDiv);
         
         var storedStat = localStorage.getItem(this.css);
