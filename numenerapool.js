@@ -30,6 +30,7 @@ var numenerapool = {
     
     getLanguage: function() {
         var lang = getParameterByName('lang');
+        if (!lang) lang = navigator.language;
         
         var frenchFlag = document.getElementById('frImg');
         var englishFlag = document.getElementById('ukImg');
