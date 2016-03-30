@@ -40,6 +40,7 @@ body {
     width: 33%;
     height: 75px;
     text-align: center;
+    font-size: 50px;
 }
 
 .add {
@@ -48,6 +49,7 @@ body {
     width: 33%;
     text-align: center;
     height: 75px;
+    font-size: 50px;
 }
 
 #credits {
