@@ -27,10 +27,17 @@ function statPool() {
         this.name = name;
         this.poolDiv = document.createElement('div');
         this.poolDiv.innerHTML = this.name;
-        this.poolDiv.className = css;
+        this.css = css;
+        this.poolDiv.className = this.css;
         div.appendChild(this.poolDiv);
         
-        this.stat = 10;
+        var storedStat = localStorage.getItem(this.css);
+        if (!storedStat) {
+            this.stat = 10;
+        } else {
+            this.stat = storedStat;
+        }
+        
         this.minusDiv = document.createElement('div');
         this.minusDiv.innerHTML = '-';
         this.statDiv = document.createElement('div');
@@ -56,6 +63,7 @@ function statPool() {
     
     this.setStat = function() {
         this.statDiv.innerHTML = this.stat.toString();
+        localStorage.setItem(this.css, this.stat);
     };
 }
 
