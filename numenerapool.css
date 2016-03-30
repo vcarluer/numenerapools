@@ -35,20 +35,18 @@ body {
 }
 
 .minus {
-    background-color: #52565b;
     float: left;
-    width: 33%;
-    height: 75px;
-    text-align: center;
-    font-size: 50px;
 }
 
 .add {
-    background-color: #52565b;
     float: right;
+}
+
+.button {
+    background-color: #52565b;
     width: 33%;
-    text-align: center;
     height: 75px;
+    text-align: center;
     font-size: 50px;
 }
 
@@ -58,4 +56,9 @@ body {
 
 a {
     color: #ffcda4;
+}
+
+.flag {
+    height: 64px;
+    opacity: 0.4;
 }

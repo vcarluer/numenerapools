@@ -38,7 +38,7 @@ function statPool() {
         }
         
         this.minusDiv = document.createElement('div');
-        this.minusDiv.className = 'minus';
+        this.minusDiv.className = 'minus button';
         this.minusDiv.innerHTML = '-';
         
         
@@ -56,7 +56,7 @@ function statPool() {
         this.statContainerDiv.appendChild(this.statDiv);
         
         this.addDiv = document.createElement('div');
-        this.addDiv.className = 'add';
+        this.addDiv.className = 'add button';
         this.addDiv.innerHTML = "+";
         
         this.poolDiv.appendChild(this.minusDiv);
