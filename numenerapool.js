@@ -26,9 +26,8 @@ function statPool() {
     this.create = function(div, css, name) {
         this.name = name;
         this.poolDiv = document.createElement('div');
-        this.poolDiv.innerHTML = this.name;
         this.css = css;
-        this.poolDiv.className = this.css;
+        
         div.appendChild(this.poolDiv);
         
         var storedStat = localStorage.getItem(this.css);
@@ -39,14 +38,29 @@ function statPool() {
         }
         
         this.minusDiv = document.createElement('div');
+        this.minusDiv.className = 'minus';
         this.minusDiv.innerHTML = '-';
+        
+        
+        this.statContainerDiv = document.createElement('div');
+        this.statContainerDiv.className = 'statContainer ' + this.css;
+        
+        this.poolTitle = document.createElement('div');
+        this.poolTitle.className = 'poolTitle';
+        this.poolTitle.innerHTML = this.name;
+        this.statContainerDiv.appendChild(this.poolTitle);
+        
         this.statDiv = document.createElement('div');
+        this.statDiv.className = 'stat';
         this.setStat();
+        this.statContainerDiv.appendChild(this.statDiv);
+        
         this.addDiv = document.createElement('div');
+        this.addDiv.className = 'add';
         this.addDiv.innerHTML = "+";
         
         this.poolDiv.appendChild(this.minusDiv);
-        this.poolDiv.appendChild(this.statDiv);
+        this.poolDiv.appendChild(this.statContainerDiv);
         this.poolDiv.appendChild(this.addDiv);
         
         var self = this;

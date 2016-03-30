@@ -3,7 +3,7 @@ body {
 }
 
 .might {
-    background-color: red;
+    background-color: red;    
 }
 
 .speed {
@@ -12,4 +12,34 @@ body {
 
 .intellect {
     background-color: blue;
+}
+
+.minus {
+    float: left;
+    width: 33%;
+    height: 75px;
+    text-align: center;
+}
+
+.statContainer {
+    float: left;
+    width: 33%;
+    height: 75px;
+}
+
+.poolTitle {
+    text-align: center;
+    display: block;
+}
+
+.stat {
+    text-align: center;
+    display: block;
+}
+
+.add {
+    float: right;
+    width: 33%;
+    text-align: center;
+    height: 75px;
 }
