@@ -86,6 +86,11 @@ a {
     margin-right: 5px;
 }
 
+.selectedVignette {
+     border-color: #FFB025;
+     background-color: #413E3A;
+}
+
 .addVignette {
     display: inline-block;
     width: 400px;

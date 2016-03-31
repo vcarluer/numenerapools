@@ -13,14 +13,16 @@ var fr = {
     'might': 'Puissance',
     'speed': 'Célérité',
     'intellect': "Intellect",
-    'npc': "PNJ"
+    'npc': "PNJ",
+    'delete': 'Supprimer'
 }
 
 var uk = {
     'might': 'Might',
     'speed': 'Speed',
     'intellect': "Intellect",
-    'npc': "NPC"
+    'npc': "NPC",
+    'delete': 'Delete'
 }
 
 var numenerapool = {
@@ -50,10 +52,14 @@ var numenerapool = {
         gmDiv.className = 'gmDiv';
         this.mainDiv.appendChild(gmDiv);
         
-        var storedPools = localStorage.getItem('gmPools');
+        var storedPools = localStorage.getItem('gmPoolArray');
         if (storedPools) {
-            for (var i = 0; i < storedPools; i++) {
-                this.createGMPool('npc', language, gmDiv);
+            this.gmPoolArray = JSON.parse(storedPools);
+            for (var i = 0; i < this.gmPoolArray.length; i++) {
+                if (this.gmPoolArray[i]) {
+                    this.createGMPool(this.gmPoolArray[i].name, language, gmDiv, this.gmPoolArray[i].caption);
+                }
+                
             }
         }
         
@@ -76,20 +82,44 @@ var numenerapool = {
         }
     },
     
-    gmPools: 0,
+    gmPoolArray: [],
     
-    createGMPool: function(poolName, language, div) {
-        this.gmPools++;
-        localStorage.setItem('gmPools', this.gmPools);
-        var vignetteName = poolName + this.gmPools.toString();
+    createGMPool: function(poolName, language, div, poolCaption) {
+        
         var poolVignette = document.createElement('div');
-        poolVignette.setAttribute('id', vignetteName + "-vignette");
+        poolVignette.setAttribute('id', poolName + "-vignette");
         poolVignette.className = 'poolVignette';
+        var self = this;
+        poolVignette.onclick = function() {
+            if (self.selectedVignette) {
+                self.selectedVignette.className = 'poolVignette'
+            }
+            self.selectedVignette = poolVignette;
+            poolVignette.className = 'poolVignette selectedVignette';
+            var deleteDiv = document.createElement('div');
+            deleteDiv.innerHTML = language['delete'];
+            poolVignette.appendChild(deleteDiv);
+            deleteDiv.onclick = function() {
+                div.removeChild(poolVignette);
+                self.selectedVignette = null;
+                for(var i = 0; i < self.gmPoolArray.length; i++) {
+                    if (self.gmPoolArray[i]) {
+                        if (self.gmPoolArray[i].name === poolName) {
+                            delete self.gmPoolArray[i];
+                            break;
+                        }
+                    }
+                }
+                
+                self.storeGMArray();
+            }
+        }
+        
         div.appendChild(poolVignette);
         var tableDiv = document.createElement('div');
         tableDiv.className = 'tableDiv';
         poolVignette.appendChild(tableDiv);
-        this.createPool(vignetteName, tableDiv, language[poolName] + ' ' + this.gmPools.toString());
+        this.createPool(poolName, tableDiv, poolCaption);
     },
     
     createPlayerPool: function(poolName, language, div) {
@@ -109,11 +139,27 @@ var numenerapool = {
         var self = this;
         addVignette.onclick = function() {
             gmDiv.removeChild(addVignette);
-            self.createGMPool('npc', language, gmDiv);
+            
+            var count = self.gmPoolArray.length + 1;
+            var vignetteName = 'npc' + (count).toString();
+            var vignetteCaption = language['npc'] + ' ' + count.toString()
+            
+            self.gmPoolArray.push({
+                name: vignetteName,
+                caption: vignetteCaption
+            });
+            
+            self.storeGMArray();
+            
+            self.createGMPool(vignetteName, language, gmDiv, language['npc'] + ' ' + count.toString());
             self.createGMAdd(gmDiv, language);
         };
         
         gmDiv.appendChild(addVignette);
+    },
+    
+    storeGMArray: function() {
+        localStorage.setItem('gmPoolArray', JSON.stringify(this.gmPoolArray));
     }
 };
 
