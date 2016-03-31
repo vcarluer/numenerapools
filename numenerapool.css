@@ -74,10 +74,11 @@ a {
 
 .gmDiv {
     width: 100%;
+    text-align: left;
 }
 
 .poolVignette {
-    display: table;
+    display: inline-block;
     width: 400px;
     border-collapse: separate;
     border-spacing: 10px;

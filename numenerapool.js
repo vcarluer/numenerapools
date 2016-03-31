@@ -20,11 +20,14 @@ var uk = {
     'npc': "NPC"
 }
 
+var pools = 0;
+
 var numenerapool = {
     run: function() {
         this.mainDiv = document.getElementById('numenerapool');
         this.pools = {};
         var language = this.getLanguage();
+        //this.createModes(language);
         this.createPlayerStats(language);
         this.createGMStats(language)
     },
@@ -35,9 +38,9 @@ var numenerapool = {
         playerDiv.className = 'tableDiv';
         this.mainDiv.appendChild(playerDiv);
         
-        this.createPool('might', language, playerDiv);
-        this.createPool('speed', language, playerDiv);
-        this.createPool('intellect', language, playerDiv);
+        this.createPlayerPool('might', language, playerDiv);
+        this.createPlayerPool('speed', language, playerDiv);
+        this.createPlayerPool('intellect', language, playerDiv);
     },
     
      createGMStats: function(language) {
@@ -46,6 +49,10 @@ var numenerapool = {
         gmDiv.className = 'gmDiv';
         this.mainDiv.appendChild(gmDiv);
         
+        this.createGMPool('npc', language, gmDiv);
+        this.createGMPool('npc', language, gmDiv);
+        this.createGMPool('npc', language, gmDiv);
+        this.createGMPool('npc', language, gmDiv);
         this.createGMPool('npc', language, gmDiv);
     },
     
@@ -66,19 +73,26 @@ var numenerapool = {
     },
     
     createGMPool: function(poolName, language, div) {
+        pools++;
+        var vignetteName = poolName + pools.toString();
         var poolVignette = document.createElement('div');
+        poolVignette.setAttribute('id', vignetteName + "-vignette");
         poolVignette.className = 'poolVignette';
         div.appendChild(poolVignette);
         var tableDiv = document.createElement('div');
         tableDiv.className = 'tableDiv';
         poolVignette.appendChild(tableDiv);
-        this.createPool(poolName, language, tableDiv);
+        this.createPool(vignetteName, tableDiv, language[poolName] + ' ' + pools.toString());
     },
     
-    createPool: function(poolName, language, tableDiv) {
+    createPlayerPool: function(poolName, language, div) {
+        this.createPool(poolName, div, language[poolName]);
+    },
+    
+    createPool: function(poolName, tableDiv, caption) {
         var pool = new statPool();
         this.pools[poolName] = pool;
-        pool.create(tableDiv, poolName, language[poolName]);
+        pool.create(tableDiv, poolName, caption);
     }
 };
 
