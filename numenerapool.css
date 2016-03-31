@@ -73,15 +73,17 @@ a {
 }
 
 .gmDiv {
-    width: 100%;
+    display: block;
     text-align: left;
 }
 
 .poolVignette {
     display: inline-block;
     width: 400px;
-    border-collapse: separate;
-    border-spacing: 10px;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: #df8339;
+    margin-right: 5px;
 }
 
 #numenerapool {

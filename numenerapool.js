@@ -48,12 +48,11 @@ var numenerapool = {
         gmDiv.setAttribute('id', 'gmDiv');
         gmDiv.className = 'gmDiv';
         this.mainDiv.appendChild(gmDiv);
+        var vignettes = document.createElement('div');
+        gmDiv.appendChild(vignettes);
         
-        this.createGMPool('npc', language, gmDiv);
-        this.createGMPool('npc', language, gmDiv);
-        this.createGMPool('npc', language, gmDiv);
-        this.createGMPool('npc', language, gmDiv);
-        this.createGMPool('npc', language, gmDiv);
+        this.createGMPool('npc', language, vignettes);
+        this.createGMAdd(gmDiv, language, vignettes);
     },
     
     getLanguage: function() {
@@ -93,6 +92,18 @@ var numenerapool = {
         var pool = new statPool();
         this.pools[poolName] = pool;
         pool.create(tableDiv, poolName, caption);
+    },
+    
+    createGMAdd: function(gmDiv, language, vignettesDiv) {
+        var addVignette = document.createElement('div');
+        addVignette.className = 'addVignette';
+        addVignette.innerHTML = '+';
+        var self = this;
+        addVignette.onclick = function() {
+            self.createGMPool('npc', language, vignettesDiv);
+        };
+        
+        gmDiv.appendChild(addVignette);
     }
 };
 
@@ -152,7 +163,7 @@ function statPool() {
     
     this.setStat = function() {
         this.statDiv.innerHTML = this.stat.toString();
-        localStorage.setItem(this.css, this.stat);
+        localStorage.setItem(this.name, this.stat);
     };
 }
 
