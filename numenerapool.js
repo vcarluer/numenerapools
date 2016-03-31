@@ -23,8 +23,6 @@ var uk = {
     'npc': "NPC"
 }
 
-var pools = 0;
-
 var numenerapool = {
     run: function() {
         this.mainDiv = document.getElementById('numenerapool');
@@ -54,7 +52,13 @@ var numenerapool = {
         var vignettes = document.createElement('div');
         gmDiv.appendChild(vignettes);
         
-        this.createGMPool('npc', language, vignettes);
+        var storedPools = localStorage.getItem('gmPools');
+        if (storedPools) {
+            for (var i = 0; i < storedPools; i++) {
+                this.createGMPool('npc', language, vignettes);
+            }
+        }
+        
         this.createGMAdd(vignettes, language, vignettes);
     },
     
@@ -74,9 +78,12 @@ var numenerapool = {
         }
     },
     
+    gmPools: 0,
+    
     createGMPool: function(poolName, language, div) {
-        pools++;
-        var vignetteName = poolName + pools.toString();
+        this.gmPools++;
+        localStorage.setItem('gmPools', this.gmPools);
+        var vignetteName = poolName + this.gmPools.toString();
         var poolVignette = document.createElement('div');
         poolVignette.setAttribute('id', vignetteName + "-vignette");
         poolVignette.className = 'poolVignette';
@@ -84,7 +91,7 @@ var numenerapool = {
         var tableDiv = document.createElement('div');
         tableDiv.className = 'tableDiv';
         poolVignette.appendChild(tableDiv);
-        this.createPool(vignetteName, tableDiv, language[poolName] + ' ' + pools.toString());
+        this.createPool(vignetteName, tableDiv, language[poolName] + ' ' + this.gmPools.toString());
     },
     
     createPlayerPool: function(poolName, language, div) {
