@@ -9,13 +9,15 @@ function ready(fn) {
 var fr = {
     'might': 'Puissance',
     'speed': 'Célérité',
-    'intellect': "Intellect"
+    'intellect': "Intellect",
+    'npc': "PNJ"
 }
 
 var uk = {
     'might': 'Might',
     'speed': 'Speed',
-    'intellect': "Intellect"
+    'intellect': "Intellect",
+    'npc': "NPC"
 }
 
 var numenerapool = {
@@ -23,9 +25,28 @@ var numenerapool = {
         this.mainDiv = document.getElementById('numenerapool');
         this.pools = {};
         var language = this.getLanguage();
-        this.createPool('might', language);
-        this.createPool('speed', language);
-        this.createPool('intellect', language);
+        this.createPlayerStats(language);
+        this.createGMStats(language)
+    },
+    
+    createPlayerStats: function(language) {
+        var playerDiv = document.createElement('div');
+        playerDiv.setAttribute('id', 'playerDiv');
+        playerDiv.className = 'tableDiv';
+        this.mainDiv.appendChild(playerDiv);
+        
+        this.createPool('might', language, playerDiv);
+        this.createPool('speed', language, playerDiv);
+        this.createPool('intellect', language, playerDiv);
+    },
+    
+     createGMStats: function(language) {
+        var gmDiv = document.createElement('div');
+        gmDiv.setAttribute('id', 'gmDiv');
+        gmDiv.className = 'gmDiv';
+        this.mainDiv.appendChild(gmDiv);
+        
+        this.createGMPool('npc', language, gmDiv);
     },
     
     getLanguage: function() {
@@ -44,22 +65,33 @@ var numenerapool = {
         }
     },
     
-    createPool: function(poolName, language) {
+    createGMPool: function(poolName, language, div) {
+        var poolVignette = document.createElement('div');
+        poolVignette.className = 'poolVignette';
+        div.appendChild(poolVignette);
+        var tableDiv = document.createElement('div');
+        tableDiv.className = 'tableDiv';
+        poolVignette.appendChild(tableDiv);
+        this.createPool(poolName, language, tableDiv);
+    },
+    
+    createPool: function(poolName, language, tableDiv) {
         var pool = new statPool();
         this.pools[poolName] = pool;
-        pool.create(this.mainDiv, poolName, language[poolName]);
+        pool.create(tableDiv, poolName, language[poolName]);
     }
 };
 
 function statPool() {
-    this.create = function(div, css, name) {
-        this.name = name;
+    this.create = function(tableDiv, name, caption) {
+        this.caption = caption;
         this.poolDiv = document.createElement('div');
-        this.css = css;
+        this.poolDiv.setAttribute('id', name);
+        this.name = name;
         this.poolDiv.className = 'pool';
-        div.appendChild(this.poolDiv);
+        tableDiv.appendChild(this.poolDiv);
         
-        var storedStat = localStorage.getItem(this.css);
+        var storedStat = localStorage.getItem(this.name);
         if (!storedStat) {
             this.stat = 10;
         } else {
@@ -72,11 +104,11 @@ function statPool() {
         
         
         this.statContainerDiv = document.createElement('div');
-        this.statContainerDiv.className = 'statContainer ' + this.css;
+        this.statContainerDiv.className = 'statContainer';
         
         this.poolTitle = document.createElement('div');
         this.poolTitle.className = 'poolTitle';
-        this.poolTitle.innerHTML = this.name;
+        this.poolTitle.innerHTML = this.caption;
         this.statContainerDiv.appendChild(this.poolTitle);
         
         this.statDiv = document.createElement('div');

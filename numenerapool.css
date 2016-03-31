@@ -40,13 +40,6 @@ body {
     display: block;
 }
 
-.minus {
-}
-
-.add {
-    
-}
-
 .button {
     display:table-cell;
     background-color: #52565b;
@@ -72,11 +65,26 @@ a {
     opacity: 0.4;
 }
 
-#numenerapool {
+.tableDiv {
     display: table;
     width: 100%;
     border-collapse: separate;
     border-spacing: 10px;
+}
+
+.gmDiv {
+    width: 100%;
+}
+
+.poolVignette {
+    display: table;
+    width: 400px;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+
+#numenerapool {
+     width: 100%;
 }
 
 #languages {
