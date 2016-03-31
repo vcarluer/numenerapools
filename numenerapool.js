@@ -14,7 +14,7 @@ var fr = {
     'speed': 'Célérité',
     'intellect': "Intellect",
     'npc': "PNJ",
-    'delete': 'Supprimer'
+    'delete': '<i class="fa fa-trash-o"></i>'
 }
 
 var uk = {
@@ -22,7 +22,7 @@ var uk = {
     'speed': 'Speed',
     'intellect': "Intellect",
     'npc': "NPC",
-    'delete': 'Delete'
+    'delete': '<i class="fa fa-trash-o"></i>'
 }
 
 var numenerapool = {
@@ -92,14 +92,26 @@ var numenerapool = {
         var self = this;
         poolVignette.onclick = function() {
             if (self.selectedVignette) {
-                self.selectedVignette.className = 'poolVignette'
+                if (self.selectedVignette.getAttribute('id') === poolVignette.getAttribute('id')) {
+                    return;
+                } else {
+                    self.selectedVignette.className = 'poolVignette'
+                }
             }
+            
             self.selectedVignette = poolVignette;
             poolVignette.className = 'poolVignette selectedVignette';
-            var deleteDiv = document.createElement('div');
-            deleteDiv.innerHTML = language['delete'];
-            poolVignette.appendChild(deleteDiv);
-            deleteDiv.onclick = function() {
+            if (!self.deleteDiv) {
+                self.deleteDiv = document.createElement('div');
+                self.deleteDiv.innerHTML = language['delete'];
+                self.deleteDiv.className = 'deleteVignette';
+                self.mainDiv.appendChild(self.deleteDiv);
+            }
+            
+            
+            self.deleteDiv.onclick = function() {
+                self.mainDiv.removeChild(self.deleteDiv);
+                self.deleteDiv = null;
                 div.removeChild(poolVignette);
                 self.selectedVignette = null;
                 for(var i = 0; i < self.gmPoolArray.length; i++) {
@@ -140,14 +152,24 @@ var numenerapool = {
         addVignette.onclick = function() {
             gmDiv.removeChild(addVignette);
             
-            var count = self.gmPoolArray.length + 1;
+            // Search next available id
+            var index = self.gmPoolArray.length;
+            for(var i = 0; i < self.gmPoolArray.length; i++) {
+                if (self.gmPoolArray[i] === null) {
+                    index = i;
+                    break;
+                }
+            }
+            
+            var count = index + 1;
+            
             var vignetteName = 'npc' + (count).toString();
             var vignetteCaption = language['npc'] + ' ' + count.toString()
             
-            self.gmPoolArray.push({
+            self.gmPoolArray[index] = {
                 name: vignetteName,
                 caption: vignetteCaption
-            });
+            };
             
             self.storeGMArray();
             
