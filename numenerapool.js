@@ -49,17 +49,15 @@ var numenerapool = {
         gmDiv.setAttribute('id', 'gmDiv');
         gmDiv.className = 'gmDiv';
         this.mainDiv.appendChild(gmDiv);
-        var vignettes = document.createElement('div');
-        gmDiv.appendChild(vignettes);
         
         var storedPools = localStorage.getItem('gmPools');
         if (storedPools) {
             for (var i = 0; i < storedPools; i++) {
-                this.createGMPool('npc', language, vignettes);
+                this.createGMPool('npc', language, gmDiv);
             }
         }
         
-        this.createGMAdd(vignettes, language, vignettes);
+        this.createGMAdd(gmDiv, language);
     },
     
     getLanguage: function() {
@@ -104,15 +102,15 @@ var numenerapool = {
         pool.create(tableDiv, poolName, caption);
     },
     
-    createGMAdd: function(gmDiv, language, vignettesDiv) {
+    createGMAdd: function(gmDiv, language) {
         var addVignette = document.createElement('div');
         addVignette.className = 'addVignette';
         addVignette.innerHTML = '+';
         var self = this;
         addVignette.onclick = function() {
             gmDiv.removeChild(addVignette);
-            self.createGMPool('npc', language, vignettesDiv);
-            self.createGMAdd(gmDiv, language, vignettesDiv);
+            self.createGMPool('npc', language, gmDiv);
+            self.createGMAdd(gmDiv, language);
         };
         
         gmDiv.appendChild(addVignette);
