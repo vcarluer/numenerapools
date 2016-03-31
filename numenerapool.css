@@ -86,6 +86,21 @@ a {
     margin-right: 5px;
 }
 
+.addVignette {
+    display: inline-block;
+    width: 400px;
+    border-width: 1px;
+    border-style: dashed;
+    border-color: #df8339;
+    margin-right: 5px;
+    height: 80px;
+    vertical-align: top;
+    text-align: center;
+    font-size: 50px;
+    font-weight: bold;
+    padding-top: 15px;
+}
+
 #numenerapool {
      width: 100%;
 }

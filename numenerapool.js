@@ -1,3 +1,6 @@
+/*global localStorage*/
+/*global navigator*/
+
 function ready(fn) {
   if (document.readyState != 'loading'){
     fn();
@@ -52,7 +55,7 @@ var numenerapool = {
         gmDiv.appendChild(vignettes);
         
         this.createGMPool('npc', language, vignettes);
-        this.createGMAdd(gmDiv, language, vignettes);
+        this.createGMAdd(vignettes, language, vignettes);
     },
     
     getLanguage: function() {
@@ -100,7 +103,9 @@ var numenerapool = {
         addVignette.innerHTML = '+';
         var self = this;
         addVignette.onclick = function() {
+            gmDiv.removeChild(addVignette);
             self.createGMPool('npc', language, vignettesDiv);
+            self.createGMAdd(gmDiv, language, vignettesDiv);
         };
         
         gmDiv.appendChild(addVignette);
