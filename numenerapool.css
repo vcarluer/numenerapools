@@ -106,16 +106,29 @@ a {
     padding-top: 15px;
 }
 
-.deleteVignette {
+.cloneVignette {
+    left: 50%;
+    border-left: solid;
+    border-color: #df8339;
+    border-width: 1px;
+}
+
+.action {
     text-align: center;
     position: fixed;
     height: 50px;
-    width: 95%;
+    width: 50%;
     bottom: 0px;
     background-color: #413E3A;
     z-index: 30;
     font-size: 50px;
     padding-bottom: 5px;
+}
+
+.filler {
+    display: block;
+    height: 50px;
+    width: 100%;
 }
 
 #numenerapool {

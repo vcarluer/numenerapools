@@ -14,7 +14,8 @@ var fr = {
     'speed': 'Célérité',
     'intellect': "Intellect",
     'npc': "PNJ",
-    'delete': '<i class="fa fa-trash-o"></i>'
+    'delete': '<i class="fa fa-trash-o"></i>',
+    'clone': '<i class="fa fa-clone"></i>'
 }
 
 var uk = {
@@ -22,7 +23,8 @@ var uk = {
     'speed': 'Speed',
     'intellect': "Intellect",
     'npc': "NPC",
-    'delete': '<i class="fa fa-trash-o"></i>'
+    'delete': '<i class="fa fa-trash-o"></i>',
+    'clone': '<i class="fa fa-clone"></i>'
 }
 
 var numenerapool = {
@@ -120,14 +122,13 @@ var numenerapool = {
             if (!self.deleteDiv) {
                 self.deleteDiv = document.createElement('div');
                 self.deleteDiv.innerHTML = language['delete'];
-                self.deleteDiv.className = 'deleteVignette';
+                self.deleteDiv.className = 'action';
                 self.mainDiv.appendChild(self.deleteDiv);
             }
             
             
             self.deleteDiv.onclick = function() {
-                self.mainDiv.removeChild(self.deleteDiv);
-                self.deleteDiv = null;
+                self.unselect();
                 div.removeChild(poolVignette);
                 self.selectedVignette = null;
                 if (self.gmPoolStats[params.name]) {
@@ -135,6 +136,17 @@ var numenerapool = {
                 }
                 
                 self.storeGMStats();
+            }
+            
+            if (!self.cloneDiv) {
+                self.cloneDiv = document.createElement('div');
+                self.cloneDiv.innerHTML = language['clone'];
+                self.cloneDiv.className = 'action cloneVignette';
+                self.mainDiv.appendChild(self.cloneDiv);
+            }
+            
+            self.cloneDiv.onclick = function() {
+                self.addNewVignette(div, language, self.gmPoolStats[params.name]);
             }
         }
         
@@ -144,6 +156,13 @@ var numenerapool = {
         poolVignette.appendChild(tableDiv);
         this.createPool(tableDiv, params, function() { self.storeGMStats(); });
         this.gmPoolStats[params.name] = params;
+    },
+    
+    unselect: function() {
+        this.mainDiv.removeChild(this.deleteDiv);
+        this.mainDiv.removeChild(this.cloneDiv);
+        this.deleteDiv = null;
+        this.cloneDiv = null;
     },
     
     createPlayerPool: function(div, params) {
@@ -158,44 +177,56 @@ var numenerapool = {
     },
     
     createGMAdd: function(gmDiv, language) {
-        var addVignette = document.createElement('div');
-        addVignette.className = 'addVignette';
-        addVignette.innerHTML = '+';
+        this.addVignette = document.createElement('div');
+        this.addVignette.className = 'addVignette';
+        this.addVignette.innerHTML = '+';    
         var self = this;
-        addVignette.onclick = function() {
-            gmDiv.removeChild(addVignette);
-            
-            // Search next available id
-            var storedIndex = localStorage.getItem('vignetteIndex');
-            var index = 1;
-            if (storedIndex) {
-                index = storedIndex;
-                index++;
-            } 
-            
-            localStorage.setItem('vignetteIndex', index);
-            
-            var count = index + 1;
-            
-            var vignetteName = 'npc' + (count).toString();
+        this.addVignette.onclick = function() {
+            self.addNewVignette(gmDiv, language);      
+        };
+    
+        gmDiv.appendChild(this.addVignette);
+    },
+    
+    addNewVignette: function(gmDiv, language, copyParams) {
+        gmDiv.removeChild(this.addVignette);
+        // Search next available id
+        var storedIndex = localStorage.getItem('vignetteIndex');
+        var index = 1;
+        if (storedIndex) {
+            index = storedIndex;
+            index++;
+        } 
+        
+        localStorage.setItem('vignetteIndex', index);
+        
+        var count = index + 1;
+        
+        var vignetteName = 'npc' + (count).toString();
+        var params = {};
+        if (copyParams) {
+            params = {
+                name: vignetteName,
+                caption: copyParams.caption,
+                stat: copyParams.stat
+            };
+        } else {
             var captionIndex = Math.floor(Math.random() * names.length);
             var vignetteCaption = names[captionIndex];
             
-            var params = {
+            params = {
                 name: vignetteName,
                 caption: vignetteCaption,
-                stat: 10,
+                stat: 10
             };
-            
-            self.gmPoolStats[vignetteName] = params;
-            
-            self.storeGMStats();
-            
-            self.createGMPool(language, gmDiv, params);
-            self.createGMAdd(gmDiv, language);
-        };
+        }
         
-        gmDiv.appendChild(addVignette);
+        this.gmPoolStats[vignetteName] = params;
+        
+        this.storeGMStats();
+        
+        this.createGMPool(language, gmDiv, params);
+        gmDiv.appendChild(this.addVignette);
     },
     
     storeGMStats: function() {
