@@ -28,7 +28,6 @@ var uk = {
 var numenerapool = {
     run: function() {
         this.mainDiv = document.getElementById('numenerapool');
-        this.pools = {};
         var language = this.getLanguage();
         //this.createModes(language);
         this.createPlayerStats(language);
@@ -41,9 +40,25 @@ var numenerapool = {
         playerDiv.className = 'tableDiv';
         this.mainDiv.appendChild(playerDiv);
         
-        this.createPlayerPool('might', language, playerDiv);
-        this.createPlayerPool('speed', language, playerDiv);
-        this.createPlayerPool('intellect', language, playerDiv);
+        var storedPools = localStorage.getItem('playerPoolStats');
+        if (storedPools) {
+            this.playerPoolStats = JSON.parse(storedPools);
+            var key, params;
+            for(key in this.playerPoolStats) {
+                if (this.playerPoolStats.hasOwnProperty(key)) {
+                    params = this.playerPoolStats[key];
+                    this.createPlayerPool(playerDiv, params);
+                }
+            }
+        } else {
+            var might = { name: 'might', caption: language['might'], stat: 10 };
+            var speed = { name: 'speed', caption: language['speed'], stat: 10 };
+            var intellect = { name: 'intellect', caption: language['intellect'], stat: 10 };
+            
+            this.createPlayerPool(playerDiv, might);
+            this.createPlayerPool(playerDiv, speed);
+            this.createPlayerPool(playerDiv, intellect);    
+        }
     },
     
      createGMStats: function(language) {
@@ -52,14 +67,15 @@ var numenerapool = {
         gmDiv.className = 'gmDiv';
         this.mainDiv.appendChild(gmDiv);
         
-        var storedPools = localStorage.getItem('gmPoolArray');
+        var storedPools = localStorage.getItem('gmPoolStats');
         if (storedPools) {
-            this.gmPoolArray = JSON.parse(storedPools);
-            for (var i = 0; i < this.gmPoolArray.length; i++) {
-                if (this.gmPoolArray[i]) {
-                    this.createGMPool(this.gmPoolArray[i].name, language, gmDiv, this.gmPoolArray[i].caption);
+            this.gmPoolStats = JSON.parse(storedPools);
+            var key, params;
+            for(key in this.gmPoolStats) {
+                if (this.gmPoolStats.hasOwnProperty(key)) {
+                    params = this.gmPoolStats[key];
+                    this.createGMPool(language, gmDiv, params);
                 }
-                
             }
         }
         
@@ -82,12 +98,12 @@ var numenerapool = {
         }
     },
     
-    gmPoolArray: [],
+    gmPoolStats: {},
+    playerPoolStats: {},
     
-    createGMPool: function(poolName, language, div, poolCaption) {
-        
+    createGMPool: function(language, div, params) {
         var poolVignette = document.createElement('div');
-        poolVignette.setAttribute('id', poolName + "-vignette");
+        poolVignette.setAttribute('id', params.name + "-vignette");
         poolVignette.className = 'poolVignette';
         var self = this;
         poolVignette.onclick = function() {
@@ -114,16 +130,11 @@ var numenerapool = {
                 self.deleteDiv = null;
                 div.removeChild(poolVignette);
                 self.selectedVignette = null;
-                for(var i = 0; i < self.gmPoolArray.length; i++) {
-                    if (self.gmPoolArray[i]) {
-                        if (self.gmPoolArray[i].name === poolName) {
-                            delete self.gmPoolArray[i];
-                            break;
-                        }
-                    }
+                if (self.gmPoolStats[params.name]) {
+                    delete self.gmPoolStats[params.name];
                 }
                 
-                self.storeGMArray();
+                self.storeGMStats();
             }
         }
         
@@ -131,17 +142,19 @@ var numenerapool = {
         var tableDiv = document.createElement('div');
         tableDiv.className = 'tableDiv';
         poolVignette.appendChild(tableDiv);
-        this.createPool(poolName, tableDiv, poolCaption);
+        this.createPool(tableDiv, params, function() { self.storeGMStats(); });
+        this.gmPoolStats[params.name] = params;
     },
     
-    createPlayerPool: function(poolName, language, div) {
-        this.createPool(poolName, div, language[poolName]);
+    createPlayerPool: function(div, params) {
+        var self = this;
+        this.createPool(div, params, function() { self.storePlayerStats(); });
+        this.playerPoolStats[params.name] = params
     },
     
-    createPool: function(poolName, tableDiv, caption) {
+    createPool: function(tableDiv, params, saveCallback) {
         var pool = new statPool();
-        this.pools[poolName] = pool;
-        pool.create(tableDiv, poolName, caption);
+        pool.create(tableDiv, params, saveCallback);
     },
     
     createGMAdd: function(gmDiv, language) {
@@ -153,11 +166,10 @@ var numenerapool = {
             gmDiv.removeChild(addVignette);
             
             // Search next available id
-            var index = self.gmPoolArray.length;
-            for(var i = 0; i < self.gmPoolArray.length; i++) {
-                if (self.gmPoolArray[i] === null) {
-                    index = i;
-                    break;
+            var key, index = 0;
+            for(key in self.gmPoolStats) {
+                if (self.gmPoolStats.hasOwnProperty(key)) {
+                    index++;   
                 }
             }
             
@@ -166,40 +178,40 @@ var numenerapool = {
             var vignetteName = 'npc' + (count).toString();
             var vignetteCaption = language['npc'] + ' ' + count.toString()
             
-            self.gmPoolArray[index] = {
+            var params = {
                 name: vignetteName,
-                caption: vignetteCaption
+                caption: vignetteCaption,
+                stat: 10
             };
             
-            self.storeGMArray();
+            self.gmPoolStats[vignetteName] = params;
             
-            self.createGMPool(vignetteName, language, gmDiv, language['npc'] + ' ' + count.toString());
+            self.storeGMStats();
+            
+            self.createGMPool(language, gmDiv, params);
             self.createGMAdd(gmDiv, language);
         };
         
         gmDiv.appendChild(addVignette);
     },
     
-    storeGMArray: function() {
-        localStorage.setItem('gmPoolArray', JSON.stringify(this.gmPoolArray));
+    storeGMStats: function() {
+        localStorage.setItem('gmPoolStats', JSON.stringify(this.gmPoolStats));
+    },
+    
+    storePlayerStats: function() {
+        localStorage.setItem('playerPoolStats', JSON.stringify(this.playerPoolStats));
     }
 };
 
 function statPool() {
-    this.create = function(tableDiv, name, caption) {
-        this.caption = caption;
+    this.create = function(tableDiv, params, saveCallback) {
+        this.caption = params.caption;
         this.poolDiv = document.createElement('div');
-        this.poolDiv.setAttribute('id', name);
-        this.name = name;
+        this.poolDiv.setAttribute('id', params.name);
+        this.name = params.name;
         this.poolDiv.className = 'pool';
         tableDiv.appendChild(this.poolDiv);
-        
-        var storedStat = localStorage.getItem(this.name);
-        if (!storedStat) {
-            this.stat = 10;
-        } else {
-            this.stat = storedStat;
-        }
         
         this.minusDiv = document.createElement('div');
         this.minusDiv.className = 'minus button';
@@ -216,7 +228,7 @@ function statPool() {
         
         this.statDiv = document.createElement('div');
         this.statDiv.className = 'stat';
-        this.setStat();
+        this.setStat(params.stat);
         this.statContainerDiv.appendChild(this.statDiv);
         
         this.addDiv = document.createElement('div');
@@ -229,19 +241,21 @@ function statPool() {
         
         var self = this;
         this.minusDiv.onclick = function() {
-            self.stat--;
-            self.setStat();
+            params.stat--;
+            self.setStat(params.stat, saveCallback);
         };
         
         this.addDiv.onclick = function() {
-            self.stat++;
-            self.setStat();
+            params.stat++;
+            self.setStat(params.stat, saveCallback);
         };
     };
     
-    this.setStat = function() {
-        this.statDiv.innerHTML = this.stat.toString();
-        localStorage.setItem(this.name, this.stat);
+    this.setStat = function(stat, saveCallback) {
+        this.statDiv.innerHTML =stat.toString();
+        if (saveCallback) {
+            saveCallback();    
+        }
     };
 }
 
