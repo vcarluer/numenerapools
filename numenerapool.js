@@ -180,6 +180,7 @@ var numenerapool = {
     },
     
     createGMPool: function(language, div, params) {
+        params.editable = true;
         var poolVignette = document.createElement('div');
         var vignetteId = params.name + '-vignette';
         poolVignette.setAttribute('id', vignetteId);
@@ -360,7 +361,23 @@ function statPool() {
         
         this.poolTitle = document.createElement('div');
         this.poolTitle.className = 'poolTitle';
-        this.poolTitle.innerHTML = this.caption;
+        if (params.editable) {
+            var editionInput = document.createElement('input');
+            editionInput.setAttribute('type', 'text');
+            editionInput.className = 'vignetteEdit';
+            editionInput.setAttribute('value', this.caption);
+            this.poolTitle.appendChild(editionInput);
+            
+            editionInput.onchange = function() {
+                params.caption = editionInput.value;
+                if (saveCallback) {
+                    saveCallback();    
+                }
+            }
+        } else {
+            this.poolTitle.innerHTML = this.caption;    
+        }
+        
         this.statContainerDiv.appendChild(this.poolTitle);
         
         this.statDiv = document.createElement('div');

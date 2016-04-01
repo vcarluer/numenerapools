@@ -36,6 +36,21 @@ body {
     font-weight: bold;
 }
 
+.vignetteEdit {
+    text-align: center;
+    display: block;
+    color: #ffcda4;
+    font-weight: bold;
+    border: 0px;
+    font-size: x-large;
+    background-color: transparent;
+    width: 100%;
+}
+
+.vignetteEdit:focus {
+    outline: none;    
+}
+
 .stat {
     text-align: center;
     display: block;
@@ -76,6 +91,11 @@ a {
 .gmDiv {
     display: none;
     text-align: center;
+}
+
+#playerDiv {
+    max-width: 800px;
+    margin: auto;
 }
 
 .poolVignette {
