@@ -34,6 +34,15 @@ var uk = {
 var numenerapool = {
     run: function() {
         this.mainDiv = document.getElementById('numenerapool');
+        var self = this;
+        this.mainDiv.onclick = function() {
+            self.unselect();
+            if (self.selectedVignette) {
+                self.selectedVignette.className = 'poolVignette';
+                self.selectedVignette = null;
+            }
+        }
+        
         var language = this.getLanguage();
         this.createModes(language);
         this.createPlayerStats(language);
@@ -106,6 +115,7 @@ var numenerapool = {
             for(key in this.playerPoolStats) {
                 if (this.playerPoolStats.hasOwnProperty(key)) {
                     params = this.playerPoolStats[key];
+                    params.caption = language[params.name];
                     this.createPlayerPool(playerDiv, params);
                 }
             }
@@ -160,15 +170,25 @@ var numenerapool = {
     gmPoolStats: {},
     playerPoolStats: {},
     
+    noBubble: function(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation();
+        }
+        else {
+            e.cancelBubble = true;
+        }
+    },
+    
     createGMPool: function(language, div, params) {
         var poolVignette = document.createElement('div');
         var vignetteId = params.name + '-vignette';
         poolVignette.setAttribute('id', vignetteId);
         poolVignette.className = 'poolVignette';
         var self = this;
-        poolVignette.onclick = function() {
+        poolVignette.onclick = function(e) {
             if (self.selectedVignette) {
                 if (self.selectedVignette.getAttribute('id') === poolVignette.getAttribute('id')) {
+                    self.noBubble(e);
                     return;
                 } else {
                     self.selectedVignette.className = 'poolVignette'
@@ -185,7 +205,7 @@ var numenerapool = {
             }
             
             
-            self.deleteDiv.onclick = function() {
+            self.deleteDiv.onclick = function(e) {
                 self.unselect();
                 div.removeChild(poolVignette);
                 self.selectedVignette = null;
@@ -208,6 +228,8 @@ var numenerapool = {
                         }
                     }
                 }
+                
+                self.noBubble(e);
             }
             
             if (!self.cloneDiv) {
@@ -217,9 +239,12 @@ var numenerapool = {
                 self.actionBar.appendChild(self.cloneDiv);
             }
             
-            self.cloneDiv.onclick = function() {
+            self.cloneDiv.onclick = function(e) {
                 self.addNewVignette(div, language, self.gmPoolStats[params.name]);
+                self.noBubble(e);
             }
+            
+            self.noBubble(e);
         }
         
         div.appendChild(poolVignette);
@@ -411,10 +436,10 @@ var names = ["McSwin",
 "Coe",
 "Konson",
 "Vierty",
-"Akil Albergus",
-"Chanin-Pricell",
+"Akil",
+"Chanin",
 "Jali",
-"Jacob Coe",
+"Jacob",
 "Denig",
 "Hundt",
 "Coser",
@@ -422,8 +447,8 @@ var names = ["McSwin",
 "Boardo",
 "Jws Wnor",
 "Amal",
-"Akiral Leton",
-"Avi Zachair",
+"Akiral",
+"Avi",
 "Barrader",
 "Archison",
 "Storch",
@@ -432,7 +457,7 @@ var names = ["McSwin",
 "Kreundt",
 "Phebaske",
 "Rowe",
-"Violen-Fran",
+"Violen",
 "Letickows",
 "Peace",
 "Pickland",
@@ -458,6 +483,6 @@ var names = ["McSwin",
 "Embergus",
 "Veight",
 "Ungeron",
-"Lofton-Cook",
+"Lofton",
 "Pheye",
 "Dewalch"];
