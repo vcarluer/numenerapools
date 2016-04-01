@@ -105,7 +105,8 @@ var numenerapool = {
     
     createGMPool: function(language, div, params) {
         var poolVignette = document.createElement('div');
-        poolVignette.setAttribute('id', params.name + "-vignette");
+        var vignetteId = params.name + '-vignette';
+        poolVignette.setAttribute('id', vignetteId);
         poolVignette.className = 'poolVignette';
         var self = this;
         poolVignette.onclick = function() {
@@ -136,6 +137,20 @@ var numenerapool = {
                 }
                 
                 self.storeGMStats();
+                
+                var key, nextParams;
+                for(key in self.gmPoolStats) {
+                    if (self.gmPoolStats.hasOwnProperty(key)) {
+                        nextParams = self.gmPoolStats[key];
+                        if (nextParams.name > params.name) {
+                            var nextVignette = document.getElementById(nextParams.name + '-vignette');
+                            if (nextVignette) {
+                                nextVignette.click();
+                                break;
+                            }
+                        }
+                    }
+                }
             }
             
             if (!self.cloneDiv) {
@@ -202,7 +217,7 @@ var numenerapool = {
         
         var count = index + 1;
         
-        var vignetteName = 'npc' + (count).toString();
+        var vignetteName = (count).toString();
         var params = {};
         if (copyParams) {
             params = {
@@ -248,7 +263,7 @@ function statPool() {
         tableDiv.appendChild(this.poolDiv);
         
         this.minusDiv = document.createElement('div');
-        this.minusDiv.className = 'minus button';
+        this.minusDiv.className = 'minus button noselect';
         this.minusDiv.innerHTML = '-';
         
         
@@ -266,7 +281,7 @@ function statPool() {
         this.statContainerDiv.appendChild(this.statDiv);
         
         this.addDiv = document.createElement('div');
-        this.addDiv.className = 'add button';
+        this.addDiv.className = 'add button noselect';
         this.addDiv.innerHTML = "+";
         
         this.poolDiv.appendChild(this.minusDiv);
