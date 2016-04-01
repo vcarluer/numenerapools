@@ -166,22 +166,25 @@ var numenerapool = {
             gmDiv.removeChild(addVignette);
             
             // Search next available id
-            var key, index = 0;
-            for(key in self.gmPoolStats) {
-                if (self.gmPoolStats.hasOwnProperty(key)) {
-                    index++;   
-                }
-            }
+            var storedIndex = localStorage.getItem('vignetteIndex');
+            var index = 1;
+            if (storedIndex) {
+                index = storedIndex;
+                index++;
+            } 
+            
+            localStorage.setItem('vignetteIndex', index);
             
             var count = index + 1;
             
             var vignetteName = 'npc' + (count).toString();
-            var vignetteCaption = language['npc'] + ' ' + count.toString()
+            var captionIndex = Math.floor(Math.random() * names.length);
+            var vignetteCaption = names[captionIndex];
             
             var params = {
                 name: vignetteName,
                 caption: vignetteCaption,
-                stat: 10
+                stat: 10,
             };
             
             self.gmPoolStats[vignetteName] = params;
@@ -273,3 +276,79 @@ function getParameterByName(name, url) {
 ready(function() {
     numenerapool.run();   
 });
+
+var names = ["McSwin",
+"Aaro Vonrak",
+"Boegler",
+"Evitter",
+"Chik",
+"Pickok",
+"Jörn Kateef",
+"Escala Drian Waggenen",
+"Kell",
+"Ohmer",
+"Amien Halle",
+"Glack",
+"Nigere Gered",
+"Limerf Eltrald",
+"Vital Ligur Ðssom",
+"Chapicus",
+"Emboz",
+"Pickok",
+"Chip",
+"Lehtikal",
+"Evil Venâncis",
+"Boschnig",
+"Coe",
+"Konson",
+"Vierty",
+"Akil Albergus",
+"Chanin-Pricell",
+"Jali Nskertiö",
+"Jacob Coe",
+"Denig",
+"Hundt",
+"Coser",
+"Chapicus",
+"Boardo",
+"Jws Wnor",
+"Amal",
+"Akiral Leton",
+"Avi Zachair",
+"Barrader",
+"Archison",
+"Storch",
+"Benex",
+"Pickart Back Freiru",
+"Kreundt",
+"Phebaske",
+"Rowe",
+"Violen-Fran",
+"Letickows",
+"Peace Outhinpei Kuhn",
+"Pickland",
+"Akill",
+"Vitan",
+"Jale",
+"Ack",
+"Brown",
+"Zachecki Caradaeli-Man",
+"Jörn Flumer",
+"Misner",
+"Jare Bravko Meyes",
+"Lloys",
+"Gaffne Yerssom",
+"Badrote",
+"Akillina",
+"Aaro Agat Orgino",
+"Chik",
+"Alcyr Baceti Cmoon",
+"Stri Nniseter",
+"Boman",
+"McMora",
+"Embergus Ignardy",
+"Veight Seariyah",
+"Ungeron Jallie Fires",
+"Lofton-Cook",
+"Pheye Ttarker-Fensper",
+"Dewalch"];
