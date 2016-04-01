@@ -309,9 +309,16 @@ var numenerapool = {
         var vignetteName = (count).toString();
         var params = {};
         if (copyParams) {
+            if (!copyParams.copyCount) {
+                copyParams.copyCount = 1;
+            }
+            
+            copyParams.copyCount++;
+            var newCaption = copyParams.caption + ' ' + copyParams.copyCount.toString();
+            
             params = {
                 name: vignetteName,
-                caption: copyParams.caption,
+                caption: newCaption,
                 stat: copyParams.stat
             };
         } else {
