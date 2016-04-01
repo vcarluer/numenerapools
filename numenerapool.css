@@ -3,6 +3,7 @@ body {
     background-color: #26282a;
     color: #df8339;
     text-align: center;
+    margin: 0px;
 }
 
 #logo {
@@ -12,7 +13,7 @@ body {
 }
 
 #appContainer {
-    width: 100%;
+    margin: 8px;
 }
 
 .pool {
@@ -73,7 +74,7 @@ a {
 }
 
 .gmDiv {
-    display: block;
+    display: none;
     text-align: left;
 }
 
@@ -108,26 +109,36 @@ a {
 
 .cloneVignette {
     left: 50%;
-    border-left: solid;
-    border-color: #df8339;
-    border-width: 1px;
+    border-style: dashed;
+    border-left-width: 1px;
+    border-top-width: 0px;
+    border-bottom-width: 0px;
+    border-right-width: 0px;
+    border-color: #FFB025;
 }
 
 .action {
+    background-color: rgba(65,62,58,0.8);
+    width: 48%;
+    display: inline-block;
+    margin:0px;
+    height: 65px;
+}
+
+.actionBar {
+    margin: 0px;
     text-align: center;
     position: fixed;
-    height: 50px;
-    width: 50%;
+    height: 65px;
     bottom: 0px;
-    background-color: #413E3A;
     z-index: 30;
     font-size: 50px;
-    padding-bottom: 5px;
+    width: 100%;
 }
 
 .filler {
     display: block;
-    height: 50px;
+    height: 70px;
     width: 100%;
 }
 
@@ -148,3 +159,42 @@ a {
   user-select: none;           /* non-prefixed version, currently
                                   not supported by any browser */
 }
+
+.appMode {
+    width: 100%;
+    display: block;
+    border-bottom-width: 1px;
+    border-right-width: 0px;
+    border-top-width: 0px;;
+    border-left-width: 0px;
+    border-style: dashed;
+    border-color: #FFB025;
+    margin-bottom: 10px;
+}
+
+.mode {
+    text-align: center;
+    color: #ffcda4;
+    font-weight: bold;
+    display: inline-block;
+    width: 35%;
+    border-bottom-width: 0px;
+    border-right-width: 1px;
+    border-top-width: 1px;;
+    border-left-width: 1px;
+    border-style: dashed;
+    border-color: #df8339;
+    margin-right: 5px;
+    height: 50px;
+}
+
+.selectedMode {
+    border-bottom-width: 0px;
+    border-right-width: 1px;
+    border-top-width: 1px;;
+    border-left-width: 1px;
+    border-style: dashed;
+    border-color: #FFB025;
+    background-color: #413E3A;
+}
+

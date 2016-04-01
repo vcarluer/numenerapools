@@ -15,7 +15,9 @@ var fr = {
     'intellect': "Intellect",
     'npc': "PNJ",
     'delete': '<i class="fa fa-trash-o"></i>',
-    'clone': '<i class="fa fa-clone"></i>'
+    'clone': '<i class="fa fa-clone"></i>',
+    'playerMode': 'Joueur',
+    'gmMode': 'MJ'
 }
 
 var uk = {
@@ -24,16 +26,71 @@ var uk = {
     'intellect': "Intellect",
     'npc': "NPC",
     'delete': '<i class="fa fa-trash-o"></i>',
-    'clone': '<i class="fa fa-clone"></i>'
+    'clone': '<i class="fa fa-clone"></i>',
+    'playerMode': 'Player',
+    'gmMode': 'GM'
 }
 
 var numenerapool = {
     run: function() {
         this.mainDiv = document.getElementById('numenerapool');
         var language = this.getLanguage();
-        //this.createModes(language);
+        this.createModes(language);
         this.createPlayerStats(language);
         this.createGMStats(language)
+        this.createActionBar();
+    },
+    
+    createActionBar: function() {
+        this.actionBar = document.createElement('div');
+        this.actionBar.className = 'actionBar';
+        this.mainDiv.appendChild(this.actionBar);
+    },
+    
+    createModes: function(language) {
+        var modeDiv = document.createElement('div');
+        modeDiv.className = 'appMode';
+        this.mainDiv.appendChild(modeDiv);
+        
+        var playerMode = document.createElement('div');
+        playerMode.className = 'mode selectedMode';
+        playerMode.innerHTML = language['playerMode'];
+        var self = this;
+        
+        modeDiv.appendChild(playerMode);
+        
+        var gmMode = document.createElement('div');
+        gmMode.className = 'mode';
+        gmMode.innerHTML = language['gmMode'];
+        
+        modeDiv.appendChild(gmMode);
+        
+        
+        playerMode.onclick = function() {
+            var gmDiv = document.getElementById('gmDiv');
+            var playerDiv = document.getElementById('playerDiv');
+        
+            self.unselect();
+            if (self.selectedVignette) {
+                self.selectedVignette.className = 'poolVignette';
+                self.selectedVignette = null;
+            }
+            
+            gmDiv.style.display = 'none';
+            gmMode.className = "mode";
+            playerDiv.style.display = 'table';    
+            playerMode.className = "mode selectedMode";
+        };
+        
+        gmMode.onclick = function() {
+            var gmDiv = document.getElementById('gmDiv');
+            var playerDiv = document.getElementById('playerDiv');
+        
+            gmDiv.style.display = 'block';
+            gmMode.className = "mode selectedMode";
+            playerDiv.style.display = 'none';    
+            playerMode.className = "mode";
+        };
     },
     
     createPlayerStats: function(language) {
@@ -124,7 +181,7 @@ var numenerapool = {
                 self.deleteDiv = document.createElement('div');
                 self.deleteDiv.innerHTML = language['delete'];
                 self.deleteDiv.className = 'action';
-                self.mainDiv.appendChild(self.deleteDiv);
+                self.actionBar.appendChild(self.deleteDiv);
             }
             
             
@@ -157,7 +214,7 @@ var numenerapool = {
                 self.cloneDiv = document.createElement('div');
                 self.cloneDiv.innerHTML = language['clone'];
                 self.cloneDiv.className = 'action cloneVignette';
-                self.mainDiv.appendChild(self.cloneDiv);
+                self.actionBar.appendChild(self.cloneDiv);
             }
             
             self.cloneDiv.onclick = function() {
@@ -174,8 +231,14 @@ var numenerapool = {
     },
     
     unselect: function() {
-        this.mainDiv.removeChild(this.deleteDiv);
-        this.mainDiv.removeChild(this.cloneDiv);
+        if (this.deleteDiv) {
+            this.actionBar.removeChild(this.deleteDiv);    
+        }
+        
+        if (this.cloneDiv) {
+            this.actionBar.removeChild(this.cloneDiv);    
+        }
+        
         this.deleteDiv = null;
         this.cloneDiv = null;
     },
@@ -324,33 +387,33 @@ ready(function() {
 });
 
 var names = ["McSwin",
-"Aaro Vonrak",
+"Aaro",
 "Boegler",
 "Evitter",
 "Chik",
 "Pickok",
-"Jörn Kateef",
-"Escala Drian Waggenen",
+"Jörn",
+"Escala",
 "Kell",
 "Ohmer",
-"Amien Halle",
+"Amien",
 "Glack",
-"Nigere Gered",
-"Limerf Eltrald",
-"Vital Ligur Ðssom",
+"Nigere",
+"Limerf",
+"Vital",
 "Chapicus",
 "Emboz",
 "Pickok",
 "Chip",
 "Lehtikal",
-"Evil Venâncis",
+"Venâncis",
 "Boschnig",
 "Coe",
 "Konson",
 "Vierty",
 "Akil Albergus",
 "Chanin-Pricell",
-"Jali Nskertiö",
+"Jali",
 "Jacob Coe",
 "Denig",
 "Hundt",
@@ -365,36 +428,36 @@ var names = ["McSwin",
 "Archison",
 "Storch",
 "Benex",
-"Pickart Back Freiru",
+"Pickart",
 "Kreundt",
 "Phebaske",
 "Rowe",
 "Violen-Fran",
 "Letickows",
-"Peace Outhinpei Kuhn",
+"Peace",
 "Pickland",
 "Akill",
 "Vitan",
 "Jale",
 "Ack",
 "Brown",
-"Zachecki Caradaeli-Man",
-"Jörn Flumer",
+"Zachecki",
+"Jörn",
 "Misner",
-"Jare Bravko Meyes",
+"Jare",
 "Lloys",
-"Gaffne Yerssom",
+"Gaffne",
 "Badrote",
 "Akillina",
-"Aaro Agat Orgino",
+"Aaro",
 "Chik",
-"Alcyr Baceti Cmoon",
-"Stri Nniseter",
+"Alcyr",
+"Stri",
 "Boman",
 "McMora",
-"Embergus Ignardy",
-"Veight Seariyah",
-"Ungeron Jallie Fires",
+"Embergus",
+"Veight",
+"Ungeron",
 "Lofton-Cook",
-"Pheye Ttarker-Fensper",
+"Pheye",
 "Dewalch"];
